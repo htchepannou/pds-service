@@ -58,17 +58,24 @@ CREATE TABLE t_phone(
 CREATE TABLE t_party_contact_mechanism(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
-    party_fk BIGINT NOT NULL REFERENCES t_party(id),
-    type_fk BIGINT NOT NULL REFERENCES t_contact_mechanism_type(id),
-    purpose_fk BIGINT REFERENCES t_contact_mechanism_purpose(id),
-    paddress_fk BIGINT REFERENCES t_paddress(id),
-    eaddress_fk BIGINT REFERENCES t_eaddress(id),
-    phone_fk BIGINT REFERENCES t_phone(id),
+    party_fk BIGINT NOT NULL,
+    type_fk BIGINT NOT NULL,
+    purpose_fk BIGINT,
+    paddress_fk BIGINT,
+    eaddress_fk BIGINT,
+    phone_fk BIGINT,
 
     no_solicitation BIT(1),
     privacy CHAR(1),
 
-    UNIQUE(party_fk, type_fk, purpose_fk, paddress_fk, eaddress_fk, phone_fk)
+    UNIQUE(party_fk, type_fk, purpose_fk, paddress_fk, eaddress_fk, phone_fk),
+
+    CONSTRAINT fk_party_contact_mechanism__party FOREIGN KEY (party_fk) REFERENCES t_party(id),
+    CONSTRAINT fk_party_contact_mechanism__type FOREIGN KEY (type_fk) REFERENCES t_contact_mechanism_type(id),
+    CONSTRAINT fk_party_contact_mechanism__purpose FOREIGN KEY (purpose_fk) REFERENCES t_contact_mechanism_purpose(id),
+    CONSTRAINT fk_party_contact_mechanism__paddress FOREIGN KEY (paddress_fk) REFERENCES t_paddress(id),
+    CONSTRAINT fk_party_contact_mechanism__eaddress FOREIGN KEY (eaddress_fk) REFERENCES t_eaddress(id),
+    CONSTRAINT fk_party_contact_mechanism__phone FOREIGN KEY (phone_fk) REFERENCES t_phone(id)
 );
 
 CREATE TABLE t_party_role_type(
@@ -76,26 +83,31 @@ CREATE TABLE t_party_role_type(
     name VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE t_party_relationship_type(
-    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-
-    from_fk BIGINT NOT NULL REFERENCES t_party_role_type(id),
-    to_fk BIGINT NOT NULL REFERENCES t_party_role_type(id),
-
-    name VARCHAR(100) NOT NULL UNIQUE
-);
-
 CREATE TABLE t_party_role(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
-    type_fk BIGINT NOT NULL REFERENCES t_party_role_type(id),
-    party_fk BIGINT NOT NULL REFERENCES t_party(id),
+    type_fk BIGINT NOT NULL,
+    party_fk BIGINT NOT NULL,
 
     from_date DATETIME,
 
-    UNIQUE(type_fk, party_fk)
+    UNIQUE(type_fk, party_fk),
+
+    CONSTRAINT fk_party_role__party FOREIGN KEY (party_fk) REFERENCES t_party(id),
+    CONSTRAINT fk_party_role__type FOREIGN KEY (type_fk) REFERENCES t_contact_mechanism_type(id)
 );
 
+CREATE TABLE t_party_relationship_type(
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+    from_fk BIGINT NOT NULL,
+    to_fk BIGINT NOT NULL,
+
+    name VARCHAR(100) NOT NULL UNIQUE,
+
+    CONSTRAINT fk_party_role_type__from FOREIGN KEY (from_fk) REFERENCES t_party_role_type(id),
+    CONSTRAINT fk_party_role_type__to FOREIGN KEY (to_fk) REFERENCES t_party_role_type(id)
+);
 
 
 

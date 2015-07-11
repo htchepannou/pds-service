@@ -1,7 +1,6 @@
 package com.tchepannou.pds.controller;
 
-import com.tchepannou.pds.dto.ErrorResponse;
-import com.tchepannou.pds.dto.party.*;
+import com.tchepannou.pds.dto.*;
 import com.tchepannou.pds.service.*;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;

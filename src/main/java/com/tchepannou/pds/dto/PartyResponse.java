@@ -1,4 +1,4 @@
-package com.tchepannou.pds.dto.party;
+package com.tchepannou.pds.dto;
 
 import com.google.common.base.Preconditions;
 import com.tchepannou.pds.enums.Gender;

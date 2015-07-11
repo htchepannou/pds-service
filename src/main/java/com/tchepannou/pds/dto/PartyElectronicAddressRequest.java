@@ -1,4 +1,4 @@
-package com.tchepannou.pds.dto.party;
+package com.tchepannou.pds.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
 

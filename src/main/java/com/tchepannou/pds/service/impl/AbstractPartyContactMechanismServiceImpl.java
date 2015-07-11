@@ -6,7 +6,7 @@ import com.tchepannou.pds.dao.ContactMechanismPurposeDao;
 import com.tchepannou.pds.dao.ContactMechanismTypeDao;
 import com.tchepannou.pds.dao.PartyDao;
 import com.tchepannou.pds.domain.*;
-import com.tchepannou.pds.dto.party.AbstractPartyContactMechanismRequest;
+import com.tchepannou.pds.dto.AbstractPartyContactMechanismRequest;
 import com.tchepannou.pds.enums.Privacy;
 import com.tchepannou.pds.exception.BadRequestException;
 import com.tchepannou.pds.service.AbstractPartyContactMechanismService;

@@ -1,4 +1,4 @@
-package com.tchepannou.pds.dto.party;
+package com.tchepannou.pds.dto;
 
 public class PartyPostalAddressRequest extends AbstractPartyContactMechanismRequest {
     //-- Attributes

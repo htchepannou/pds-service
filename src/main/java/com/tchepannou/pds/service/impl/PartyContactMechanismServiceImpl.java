@@ -3,10 +3,10 @@ package com.tchepannou.pds.service.impl;
 import com.tchepannou.core.exception.NotFoundException;
 import com.tchepannou.pds.dao.*;
 import com.tchepannou.pds.domain.*;
-import com.tchepannou.pds.dto.party.ContactMechanismListResponse;
-import com.tchepannou.pds.dto.party.PartyElectronicAddressResponse;
-import com.tchepannou.pds.dto.party.PartyPhoneResponse;
-import com.tchepannou.pds.dto.party.PartyPostalAddressResponse;
+import com.tchepannou.pds.dto.ContactMechanismListResponse;
+import com.tchepannou.pds.dto.PartyElectronicAddressResponse;
+import com.tchepannou.pds.dto.PartyPhoneResponse;
+import com.tchepannou.pds.dto.PartyPostalAddressResponse;
 import com.tchepannou.pds.service.PartyContactMechanismService;
 import org.springframework.beans.factory.annotation.Autowired;
 

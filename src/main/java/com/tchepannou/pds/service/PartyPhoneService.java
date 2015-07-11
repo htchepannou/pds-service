@@ -1,9 +1,9 @@
 package com.tchepannou.pds.service;
 
 import com.tchepannou.pds.domain.PartyPhone;
-import com.tchepannou.pds.dto.party.CreatePartyPhoneRequest;
-import com.tchepannou.pds.dto.party.PartyPhoneRequest;
-import com.tchepannou.pds.dto.party.PartyPhoneResponse;
+import com.tchepannou.pds.dto.CreatePartyPhoneRequest;
+import com.tchepannou.pds.dto.PartyPhoneRequest;
+import com.tchepannou.pds.dto.PartyPhoneResponse;
 
 public interface PartyPhoneService extends AbstractPartyContactMechanismService<PartyPhone>{
     PartyPhoneResponse addAddress(long partyId, CreatePartyPhoneRequest request);

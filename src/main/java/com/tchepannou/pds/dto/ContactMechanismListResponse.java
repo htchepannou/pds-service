@@ -1,4 +1,4 @@
-package com.tchepannou.pds.dto.party;
+package com.tchepannou.pds.dto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -51,9 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(authenticationEntryPoint())
                 */
         ;
-
-        configureAuthentication(http);
-        configureAuthorization(http);
     }
 
 
@@ -90,14 +87,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //-- Protected
-    protected void configureAuthentication(final HttpSecurity http) {   // NOSONAR
-
-    }
-
-    protected void configureAuthorization(final HttpSecurity http) {    // NOSONAR
-
-    }
-
     protected String[] getActuatorEndpoints(){
         return ACTUATOR_ENDPOINTS;
     }

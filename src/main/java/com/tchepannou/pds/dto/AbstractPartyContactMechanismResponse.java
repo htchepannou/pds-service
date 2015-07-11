@@ -1,4 +1,4 @@
-package com.tchepannou.pds.dto.party;
+package com.tchepannou.pds.dto;
 
 import com.tchepannou.pds.domain.ContactMechanismPurpose;
 import com.tchepannou.pds.domain.PartyContactMecanism;

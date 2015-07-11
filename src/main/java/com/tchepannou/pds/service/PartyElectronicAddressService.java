@@ -1,9 +1,9 @@
 package com.tchepannou.pds.service;
 
 import com.tchepannou.pds.domain.PartyElectronicAddress;
-import com.tchepannou.pds.dto.party.CreatePartyElectronicAddressRequest;
-import com.tchepannou.pds.dto.party.PartyElectronicAddressRequest;
-import com.tchepannou.pds.dto.party.PartyElectronicAddressResponse;
+import com.tchepannou.pds.dto.CreatePartyElectronicAddressRequest;
+import com.tchepannou.pds.dto.PartyElectronicAddressRequest;
+import com.tchepannou.pds.dto.PartyElectronicAddressResponse;
 
 public interface PartyElectronicAddressService extends AbstractPartyContactMechanismService<PartyElectronicAddress>{
     PartyElectronicAddressResponse addEmail (long partyId, String email);

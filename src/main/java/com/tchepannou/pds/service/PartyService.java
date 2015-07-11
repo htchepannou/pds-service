@@ -1,7 +1,7 @@
 package com.tchepannou.pds.service;
 
-import com.tchepannou.pds.dto.party.CreatePartyRequest;
-import com.tchepannou.pds.dto.party.PartyResponse;
+import com.tchepannou.pds.dto.CreatePartyRequest;
+import com.tchepannou.pds.dto.PartyResponse;
 
 public interface PartyService {
     PartyResponse findById(long id);

@@ -1,8 +1,8 @@
-package com.tchepannou.pds.dto.party;
+package com.tchepannou.pds.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class CreatePartyElectronicAddressRequest extends PartyElectronicAddressRequest {
+public class CreatePartyPhoneRequest extends PartyPhoneRequest {
     //-- Attributes
     @NotBlank (message = "type")
     private String type;
