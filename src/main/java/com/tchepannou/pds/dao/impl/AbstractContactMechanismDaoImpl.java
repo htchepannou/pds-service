@@ -38,7 +38,7 @@ public abstract class AbstractContactMechanismDaoImpl<T extends ContactMechanism
     public T findById (long id) {
         try {
             return queryForObject(
-                    "SELECT * FROM " + getTableName() + " WHERE id=?",
+                    String.format("SELECT * FROM %s WHERE id=?", getTableName()),
                     new Object[]{id},
                     getRowMapper()
             );
@@ -51,7 +51,7 @@ public abstract class AbstractContactMechanismDaoImpl<T extends ContactMechanism
     public T findByHash (String hash) {
         try {
             return queryForObject(
-                    "SELECT * FROM " + getTableName() + " WHERE hash=?",
+                    String.format("SELECT * FROM %s WHERE hash=?", getTableName()),
                     new Object[]{hash},
                     getRowMapper()
             );
@@ -66,7 +66,9 @@ public abstract class AbstractContactMechanismDaoImpl<T extends ContactMechanism
             return Collections.emptyList();
         }
 
-        final StringBuilder sql = new StringBuilder("SELECT * FROM " + getTableName() + " WHERE id IN (");
+        final StringBuilder sql = new StringBuilder(
+                String.format("SELECT * FROM %s WHERE id IN (", getTableName())
+        );
         for (int i=0, size=ids.size() ; i<size ; i++) {
             if (i>0){
                 sql.append(',');

@@ -37,19 +37,6 @@ public class PartyDaoImpl extends JdbcTemplate implements PartyDao {
     }
 
     @Override
-    public Party findByUser (final long userId) {
-        try {
-            return queryForObject(
-                    "SELECT P.* FROM t_party P JOIN t_user U ON P.id=U.party_fk WHERE U.id=? AND U.deleted=?",
-                    new Object[]{userId, false},
-                    getRowMapper()
-            );
-        } catch (EmptyResultDataAccessException e) {    // NOSONAR
-            return null;
-        }
-    }
-
-    @Override
     public long create(Party party) {
         final KeyHolder holder = new GeneratedKeyHolder();
         update(new PreparedStatementCreator() {

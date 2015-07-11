@@ -86,16 +86,6 @@ public class AppConfig {
 
 
     @Bean
-    public ContactMechanismTypeService contactMechanismTypeService() {
-        return new ContactMechanismTypeServiceImpl();
-    }
-
-    @Bean
-    public ContactMechanismPurposeService contactMechanismPurposeService (){
-        return new ContactMechanismPurposeServiceImpl();
-    }
-
-    @Bean
     public ElectronicAddressDao electronicAddressDao() {
         return new ElectronicAddressDaoImpl(dataSource());
     }
