@@ -71,7 +71,7 @@ public abstract class AbstractPartyContactMechanismServiceImpl<T extends PartyCo
     }
 
     protected Class getPersistentClass () {
-        return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+        return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     public T createAddress(
@@ -95,7 +95,6 @@ public abstract class AbstractPartyContactMechanismServiceImpl<T extends PartyCo
 
     }
 
-    @Deprecated
     public T addAddress(
             final Party party,
             final String typeName,
