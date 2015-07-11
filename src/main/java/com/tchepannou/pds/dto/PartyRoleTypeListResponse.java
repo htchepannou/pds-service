@@ -20,7 +20,7 @@ public class PartyRoleTypeListResponse {
     }
 
     //-- Getter/Setter
-    public List<PartyRoleTypeResponse> getPartyRoleTypes() {
+    public List<PartyRoleTypeResponse> getTypes() {
         return Collections.unmodifiableList(types);
     }
 

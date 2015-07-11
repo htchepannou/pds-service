@@ -1,9 +1,12 @@
 package com.tchepannou.pds.controller;
 
+import com.tchepannou.pds.dto.PartyRoleTypeListResponse;
+import com.tchepannou.pds.service.PartyRoleTypeService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +19,9 @@ public class PartyRoleController extends AbstractController {
     //-- Attributes
     private Logger LOG = LoggerFactory.getLogger(PartyRoleController.class);
 
+    @Autowired
+    private PartyRoleTypeService partyRoleTypeService;
+
     //-- AbstractController overrides
     @Override
     protected Logger getLogger() {
@@ -25,7 +31,7 @@ public class PartyRoleController extends AbstractController {
     //-- REST methods
     @RequestMapping(method = RequestMethod.GET, value = "/types")
     @ApiOperation("Returns all the PartyRole types ")
-    public void types (){
-
+    public PartyRoleTypeListResponse types (){
+        return partyRoleTypeService.findAll();
     }
 }

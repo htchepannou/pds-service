@@ -106,11 +106,6 @@ public class AppConfig {
     }
 
     @Bean
-    public PartyRoleTypeDao partyRoleTypeDao() {
-        return new PartyRoleTypeDaoImpl(dataSource());
-    }
-    
-    @Bean
     public PhoneDao phoneDao () {
         return new PhoneDaoImpl(dataSource());
     }
@@ -118,5 +113,15 @@ public class AppConfig {
     @Bean
     public PostalAddressDao postalAddressDao () {
         return new PostalAddressDaoImpl(dataSource());
+    }
+
+
+    @Bean
+    public PartyRoleTypeDao partyRoleTypeDao() {
+        return new PartyRoleTypeDaoImpl(dataSource());
+    }
+    @Bean
+    public PartyRoleTypeService partyRoleTypeService (){
+        return new PartyRoleTypeServiceImpl();
     }
 }
