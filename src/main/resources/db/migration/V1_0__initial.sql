@@ -83,6 +83,24 @@ CREATE TABLE t_party_role_type(
     name VARCHAR(100) NOT NULL UNIQUE
 );
 
+CREATE TABLE t_party_role_status_code(
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+    name VARCHAR(100) NOT NULL UNIQUE,
+    active BIT(1)
+) ENGINE=INNODB;
+
+CREATE TABLE t_party_role_default_status_code(
+    status_code_fk BIGINT NOT NULL,
+    type_fk BIGINT NOT NULL,
+
+    PRIMARY KEY (status_code_fk, type_fk),
+
+    CONSTRAINT fk_party_role_default_status__status_code FOREIGN KEY (status_code_fk) REFERENCES t_party_role_status_code(id),
+    CONSTRAINT fk_party_role_default_status__type_fk FOREIGN KEY (type_fk) REFERENCES t_party_role_type(id)
+) ENGINE=INNODB;
+
+
 CREATE TABLE t_party_role(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 

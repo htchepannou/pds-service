@@ -124,4 +124,14 @@ public class AppConfig {
     public PartyRoleTypeService partyRoleTypeService (){
         return new PartyRoleTypeServiceImpl();
     }
+
+    @Bean
+    public PartyRoleStatusCodeDao partyTypeStatusCodeDao (){
+        return new PartyRoleStatusCodeDaoImpl(dataSource());
+    }
+
+    @Bean
+    public PartyRoleStatusCodeService partyRoleStatusCodeService (){
+        return new PartyRoleStatusCodeServiceImpl();
+    }
 }

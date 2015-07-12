@@ -46,4 +46,20 @@ public class PartyRoleControllerIT {
         ;
         // @formatter:on
     }
+
+    @Test
+    public void test_statusCodes () {
+        // @formatter:off
+        when()
+            .get("/api/party-roles/status-codes")
+        .then()
+            .statusCode(HttpStatus.SC_OK)
+            .log()
+                .all()
+            .body("statusCodes.id", hasItems(1, 2, 3))
+            .body("statusCodes.name", hasItems("new", "active", "suspended"))
+            .body("statusCodes.active", hasItems(false, true, false))
+        ;
+        // @formatter:on
+    }
 }

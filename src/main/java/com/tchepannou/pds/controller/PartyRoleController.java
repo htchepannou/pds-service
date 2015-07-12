@@ -1,6 +1,8 @@
 package com.tchepannou.pds.controller;
 
+import com.tchepannou.pds.dto.PartyRoleStatusCodeListResponse;
 import com.tchepannou.pds.dto.PartyRoleTypeListResponse;
+import com.tchepannou.pds.service.PartyRoleStatusCodeService;
 import com.tchepannou.pds.service.PartyRoleTypeService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -22,6 +24,9 @@ public class PartyRoleController extends AbstractController {
     @Autowired
     private PartyRoleTypeService partyRoleTypeService;
 
+    @Autowired
+    private PartyRoleStatusCodeService partyRoleStatusCodeService;
+
     //-- AbstractController overrides
     @Override
     protected Logger getLogger() {
@@ -33,5 +38,11 @@ public class PartyRoleController extends AbstractController {
     @ApiOperation("Returns all the PartyRole types ")
     public PartyRoleTypeListResponse types (){
         return partyRoleTypeService.findAll();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/status-codes")
+    @ApiOperation("Returns all the PartyRole status codes")
+    public PartyRoleStatusCodeListResponse statusCodes (){
+        return partyRoleStatusCodeService.findAll();
     }
 }
