@@ -15,7 +15,7 @@ public class PartyRoleTypeListResponse {
     private PartyRoleTypeListResponse(final Builder builder){
         final PartyRoleTypeResponse.Builder statusBuilder = new PartyRoleTypeResponse.Builder();
         types = builder.types.stream()
-                .map(type -> statusBuilder.withPartyRoleType(type).build())
+                .map(type -> statusBuilder.withType(type).build())
                 .collect(Collectors.toList());
     }
 

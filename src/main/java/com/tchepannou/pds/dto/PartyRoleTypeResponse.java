@@ -32,7 +32,7 @@ public class PartyRoleTypeResponse {
             return new PartyRoleTypeResponse(this);
         }
 
-        public Builder withPartyRoleType (final PartyRoleType role) {
+        public Builder withType(final PartyRoleType role) {
             this.role = role;
             return this;
         }

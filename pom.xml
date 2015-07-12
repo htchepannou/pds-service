@@ -394,12 +394,13 @@
 
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>src/migration/sql/is5/party_role_types.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/person.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/organization.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/address_electronic.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/address_postal.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/address_phone.sql</srcFile>
+                                        <srcFile>src/migration/sql/is5/party_role.sql</srcFile>
+                                        <srcFile>src/migration/sql/is5/club.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>

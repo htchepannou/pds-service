@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class PartyRole extends Persistent {
     private long partyId;
+    private long statusId;
     private long typeId;
     private Date fromDate;
 
@@ -31,5 +32,13 @@ public class PartyRole extends Persistent {
 
     public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
+    }
+
+    public long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(long statusId) {
+        this.statusId = statusId;
     }
 }

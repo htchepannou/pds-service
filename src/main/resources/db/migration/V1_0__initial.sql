@@ -112,8 +112,24 @@ CREATE TABLE t_party_role(
     UNIQUE(type_fk, party_fk),
 
     CONSTRAINT fk_party_role__party FOREIGN KEY (party_fk) REFERENCES t_party(id),
-    CONSTRAINT fk_party_role__type FOREIGN KEY (type_fk) REFERENCES t_contact_mechanism_type(id)
+    CONSTRAINT fk_party_role__type FOREIGN KEY (type_fk) REFERENCES t_party_role_type(id)
 );
+
+CREATE TABLE t_party_role_status (
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+    party_role_fk BIGINT NOT NULL,
+    status_code_fk BIGINT NOT NULL,
+
+    status_date DATETIME,
+    comment TEXT,
+
+    CONSTRAINT fk_party_role_status__party_role FOREIGN KEY (party_role_fk) REFERENCES t_party_role(id),
+    CONSTRAINT fk_party_role_status__status_code FOREIGN KEY (status_code_fk) REFERENCES t_party_role_status_code(id)
+) ENGINE=INNODB;
+
+ALTER TABLE t_party_role ADD COLUMN status_fk BIGINT REFERENCES t_party_role_status(id);
+
 
 CREATE TABLE t_party_relationship_type(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
