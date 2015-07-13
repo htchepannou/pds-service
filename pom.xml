@@ -180,10 +180,17 @@
             <version>${spring.version}</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build.aws</groupId>
+                <artifactId>org.springframework.build.aws.maven</artifactId>
+                <version>3.0.0.RELEASE</version>
+            </extension>
+        </extensions>
+
         <plugins>
             <!-- ======= Compile  ============== -->
             <plugin>
@@ -346,6 +353,7 @@
         <profile>
             <id>migration</id>
             <build>
+
                 <plugins>
                     <!-- === Skip tests === -->
                     <plugin>
