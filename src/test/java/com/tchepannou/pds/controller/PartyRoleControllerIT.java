@@ -4,7 +4,6 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.tchepannou.pds.Starter;
-import com.tchepannou.pds.dao.PartyRoleStatusDao;
 import com.tchepannou.pds.dto.CreatePartyRoleRequest;
 import com.tchepannou.pds.dto.PartyRoleStatusRequest;
 import org.apache.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -21,9 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,9 +32,6 @@ import static org.hamcrest.core.Is.is;
 public class PartyRoleControllerIT {
     @Value("${server.port}")
     int port;
-
-    @Autowired
-    private PartyRoleStatusDao partyRoleStatusDao;
 
     @Before
     public void setUp (){
@@ -198,7 +191,7 @@ public class PartyRoleControllerIT {
     public void test_create_person (){
         CreatePartyRoleRequest request = new CreatePartyRoleRequest();
         request.setType("member");
-        request.setPartyKind("person");
+        request.setKind("person");
         request.setFirstName("Ray");
         request.setLastName("Sponsible");
 
@@ -238,7 +231,7 @@ public class PartyRoleControllerIT {
     public void test_create_org (){
         CreatePartyRoleRequest request = new CreatePartyRoleRequest();
         request.setType("team");
-        request.setPartyKind("organization");
+        request.setKind("organization");
         request.setName("NYSC");
 
         // @formatter:off
@@ -277,7 +270,7 @@ public class PartyRoleControllerIT {
     public void test_create_badType (){
         CreatePartyRoleRequest request = new CreatePartyRoleRequest();
         request.setType("????");
-        request.setPartyKind("organization");
+        request.setKind("organization");
         request.setName("NYSC");
 
         // @formatter:off

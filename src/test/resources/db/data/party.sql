@@ -43,4 +43,7 @@ insert into t_phone(id, country_code, number, extension, hash) values (142, 'USA
 insert into t_party_contact_mechanism(id, party_fk, phone_fk, type_fk, purpose_fk, no_solicitation, privacy) values(142, 100, 142, 400, 402, 1, 'H');
 
 -- xxx_badParty
-insert into t_party(id, name) values (200, 'Ray Sponsible');
+insert into t_party(id, name, kind) values (200, 'Ray Sponsible', 'P');
+
+-- updateParty
+insert into t_party(id, name, kind) values (300, 'John Smith', 'P');

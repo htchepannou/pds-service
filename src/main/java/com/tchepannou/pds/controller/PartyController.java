@@ -54,6 +54,20 @@ public class PartyController extends AbstractController{
         return partyService.findById(partyId);
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/{partyId}")
+    @ApiOperation("Update")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Party not found", response = ErrorResponse.class)
+    })
+    public PartyResponse update(
+            @PathVariable final long partyId,
+            @Valid @RequestBody final PartyRequest request
+    ) {
+        return partyService.update(partyId, request);
+    }
+
+
     @RequestMapping(method = RequestMethod.GET, value = "/{partyId}/contacts")
     @ApiOperation("Returns a Party contacts mechanisms")
     @ApiResponses(value = {

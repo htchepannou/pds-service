@@ -108,7 +108,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
     //-- Private
     private Party createParty(CreatePartyRoleRequest request){
         Party party = new Party();
-        party.setKind(PartyKind.fromText(request.getPartyKind()));
+        party.setKind(PartyKind.fromText(request.getKind()));
         party.setFirstName(request.getFirstName());
         party.setLastName(request.getLastName());
         party.setName(request.getName());

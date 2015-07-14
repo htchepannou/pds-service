@@ -13,7 +13,9 @@ import com.tchepannou.pds.domain.PartyPostalAddress;
 import com.tchepannou.pds.dto.CreatePartyElectronicAddressRequest;
 import com.tchepannou.pds.dto.CreatePartyPhoneRequest;
 import com.tchepannou.pds.dto.CreatePartyPostalAddressRequest;
+import com.tchepannou.pds.dto.PartyRequest;
 import com.tchepannou.pds.enums.Privacy;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,9 +87,9 @@ public class PartyControllerIT {
         when()
             .get("/api/parties/99999")
         .then()
-            .statusCode(HttpStatus.SC_NOT_FOUND)
             .log()
                 .all()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
         ;
         // @formatter:on
     }
@@ -98,9 +100,9 @@ public class PartyControllerIT {
         when()
             .get("/api/parties/100/contacts")
         .then()
-            .statusCode(HttpStatus.SC_OK)
             .log()
                 .all()
+            .statusCode(HttpStatus.SC_OK)
             .body("emailAddresses.id", hasItems(101, 102))
             .body("emailAddresses.noSolicitation", hasItems(false, true))
             .body("emailAddresses.privacy", hasItems(null, "HIDDEN"))
@@ -200,9 +202,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/e-addresses/121")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 .body("noSolicitation", is(request.isNoSolicitation()))
                 .body("purpose", is(request.getPurpose()))
                 .body("address", is(request.getAddress()))
@@ -222,9 +224,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/200/contacts/e-addresses/121")
         .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 ;
         // @formatter:on
     }
@@ -237,9 +239,9 @@ public class PartyControllerIT {
         .when()
                 .delete("/api/parties/100/contacts/e-addresses/121")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 ;
         // @formatter:on
 
@@ -255,9 +257,9 @@ public class PartyControllerIT {
         .when()
                 .delete("/api/parties/200/contacts/e-addresses/121")
         .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 ;
         // @formatter:on
     }
@@ -273,9 +275,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/p-addresses")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 .body("noSolicitation", is(request.isNoSolicitation()))
                 .body("purpose", is(request.getPurpose()))
                 .body("privacy", is(request.getPrivacy()))
@@ -300,9 +302,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/p-addresses")
         .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("message", is("type"))
                 ;
         // @formatter:on
@@ -319,9 +321,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/p-addresses")
         .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("message", is("purpose"))
                 ;
         // @formatter:on
@@ -339,9 +341,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/p-addresses")
         .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("message", is("privacy"))
                 ;
         // @formatter:on
@@ -358,9 +360,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/p-addresses/131")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 .body("noSolicitation", is(request.isNoSolicitation()))
                 .body("purpose", is(request.getPurpose()))
                 .body("privacy", is(request.getPrivacy()))
@@ -385,9 +387,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/200/contacts/p-addresses/131")
         .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 ;
         // @formatter:on
     }
@@ -400,9 +402,9 @@ public class PartyControllerIT {
         .when()
                 .delete("/api/parties/100/contacts/p-addresses/131")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 ;
         // @formatter:on
 
@@ -418,9 +420,9 @@ public class PartyControllerIT {
         .when()
                 .delete("/api/parties/200/contacts/p-addresses/131")
         .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 ;
         // @formatter:on
     }
@@ -435,9 +437,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/phones")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 .body("noSolicitation", is(request.isNoSolicitation()))
                 .body("purpose", is(request.getPurpose()))
                 .body("privacy", is(request.getPrivacy()))
@@ -459,9 +461,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/100/contacts/phones/141")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 .body("noSolicitation", is(request.isNoSolicitation()))
                 .body("purpose", is(request.getPurpose()))
                 .body("privacy", is(request.getPrivacy()))
@@ -483,9 +485,9 @@ public class PartyControllerIT {
         .when()
                 .put("/api/parties/200/contacts/phones/141")
         .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 ;
         // @formatter:on
     }
@@ -498,9 +500,9 @@ public class PartyControllerIT {
         .when()
                 .delete("/api/parties/100/contacts/phones/141")
         .then()
-                .statusCode(HttpStatus.SC_OK)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_OK)
                 ;
         // @formatter:on
 
@@ -516,13 +518,75 @@ public class PartyControllerIT {
         .when()
                 .delete("/api/parties/200/contacts/phones/141")
         .then()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .log()
                     .all()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 ;
         // @formatter:on
     }
 
+    @Test
+    public void test_update () throws Exception {
+        PartyRequest request = new PartyRequest();
+        request.setFirstName("Ray");
+        request.setLastName("Sponsible");
+        request.setPrefix("Mr");
+        request.setSuffix("PHD");
+        request.setBirthDate(DateUtils.parseDate("1973-12-27", new String[] {"yyyy-MM-dd"}));
+        request.setGender("male");
+        request.setHeigth(180);
+        request.setWeight(230);
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .put("/api/parties/300")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_OK)
+            .body("id", is(300))
+            .body("name", is("Ray Sponsible"))
+            .body("firstName", is("Ray"))
+            .body("lastName", is("Sponsible"))
+            .body("prefix", is("Mr"))
+            .body("suffix", is("PHD"))
+            .body("birthDate", is("1973-12-27 00:00:00"))
+            .body("gender", is("MALE"))
+            .body("kind", is("PERSON"))
+            .body("heigth", is(180))
+            .body("weight", is(230))
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_update_badId () throws Exception {
+        PartyRequest request = new PartyRequest();
+        request.setFirstName("Ray");
+        request.setLastName("Sponsible");
+        request.setPrefix("Mr");
+        request.setSuffix("PHD");
+        request.setBirthDate(DateUtils.parseDate("1973-12-27", new String[]{"yyyy-MM-dd"}));
+        request.setGender("male");
+        request.setHeigth(180);
+        request.setWeight(230);
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .put("/api/parties/9999")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+        ;
+        // @formatter:on
+    }
 
 
     //-- Attribute
