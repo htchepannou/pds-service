@@ -21,7 +21,7 @@ public class PartyRoleStatusCodeDaoImpl extends AbstractPersistentEnumDaoImpl<Pa
         return queryForObject(
                 "SELECT * FROM " + getTableName() + " S"
                 + " JOIN t_party_role_default_status_code D"
-                + " WHERE S.id=D.status_code_fk AND S.type_fk=?",
+                + " WHERE S.id=D.status_code_fk AND D.type_fk=?",
                 new Object[]{typeId},
                 getRowMapper()
         );

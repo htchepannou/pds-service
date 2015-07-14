@@ -1,18 +1,19 @@
 package com.tchepannou.pds.controller;
 
-import com.tchepannou.pds.dto.CreatePartyRoleRequest;
-import com.tchepannou.pds.dto.PartyRoleResponse;
-import com.tchepannou.pds.dto.PartyRoleStatusCodeListResponse;
-import com.tchepannou.pds.dto.PartyRoleTypeListResponse;
+import com.tchepannou.pds.dto.*;
 import com.tchepannou.pds.service.PartyRoleService;
 import com.tchepannou.pds.service.PartyRoleStatusCodeService;
 import com.tchepannou.pds.service.PartyRoleTypeService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,13 +55,35 @@ public class PartyRoleController extends AbstractController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{partyRoleId}")
     @ApiOperation("Returns a PartyRole")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Success"),
+            @ApiResponse(code = 404, message = "PartyRole not found", response = ErrorResponse.class)
+    })
     public PartyRoleResponse findById (@PathVariable final long partyRoleId){
         return partyRoleService.findById(partyRoleId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation("Create")
-    public PartyRoleResponse create (@Valid @RequestBody CreatePartyRoleRequest request){
-        return partyRoleService.create(request);
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Success"),
+            @ApiResponse(code = 404, message = "PartyRole not found", response = ErrorResponse.class)
+    })
+    public ResponseEntity<PartyRoleResponse> create (@Valid @RequestBody final CreatePartyRoleRequest request){
+        PartyRoleResponse response = partyRoleService.create(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{partyRoleId}/status")
+    @ApiOperation("Set Status")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "PartyRole not found", response = ErrorResponse.class)
+    })
+    public PartyRoleResponse setStatus(
+            @PathVariable final long partyRoleId,
+            @Valid @RequestBody final PartyRoleStatusRequest request
+    ){
+        return partyRoleService.setStatus(partyRoleId, request);
     }
 }

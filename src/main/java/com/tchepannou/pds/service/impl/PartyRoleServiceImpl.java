@@ -5,10 +5,12 @@ import com.tchepannou.pds.dao.*;
 import com.tchepannou.pds.domain.*;
 import com.tchepannou.pds.dto.CreatePartyRoleRequest;
 import com.tchepannou.pds.dto.PartyRoleResponse;
+import com.tchepannou.pds.dto.PartyRoleStatusRequest;
 import com.tchepannou.pds.enums.PartyKind;
 import com.tchepannou.pds.exception.BadRequestException;
 import com.tchepannou.pds.service.PartyRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -74,6 +76,33 @@ public class PartyRoleServiceImpl implements PartyRoleService {
                 .withType(type)
                 .build()
         ;
+    }
+
+    @Override
+    @Transactional
+    public PartyRoleResponse setStatus(long id, PartyRoleStatusRequest request) {
+        PartyRole partyRole = partyRoleDao.findById(id);
+        if (partyRole == null) {
+            throw new NotFoundException(id, PartyRole.class);
+        }
+
+        try {
+            PartyRoleStatus status = createPartyRoleStatus(partyRole, request.getStatusCode(), request.getComment());
+
+            partyRole.setStatusId(status.getId());
+            partyRoleDao.update(partyRole);
+
+            return new PartyRoleResponse.Builder()
+                    .withParty(partyDao.findById(partyRole.getPartyId()))
+                    .withPartyRole(partyRole)
+                    .withStatus(status)
+                    .withStatusCode(statusCodeDao.findById(status.getStatusCodeId()))
+                    .withType(typeDao.findById(partyRole.getTypeId()))
+                    .build()
+                    ;
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException("statusCode");
+        }
     }
 
     //-- Private
