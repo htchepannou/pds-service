@@ -58,7 +58,8 @@ public class PartyRoleDaoImpl extends JdbcTemplate implements PartyRoleDao {
 
         long id = holder.getKey().longValue();
         party.setId(id);
-        return id;    }
+        return id;
+    }
 
     @Override
     public void update(PartyRole partyRole) {

@@ -7,6 +7,8 @@ public class CreatePartyRoleRequest extends CreatePartyRequest{
     @NotBlank(message = "type")
     private String type;
 
+    private PartyRoleRelationshipRequest relationship;
+
     //-- Getter/Setter
     public String getType() {
         return type;
@@ -14,5 +16,13 @@ public class CreatePartyRoleRequest extends CreatePartyRequest{
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public PartyRoleRelationshipRequest getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(PartyRoleRelationshipRequest relationship) {
+        this.relationship = relationship;
     }
 }

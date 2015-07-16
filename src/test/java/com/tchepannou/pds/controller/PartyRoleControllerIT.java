@@ -4,21 +4,28 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.tchepannou.pds.Starter;
+import com.tchepannou.pds.dao.PartyRoleRelationshipDao;
+import com.tchepannou.pds.domain.PartyRoleRelationship;
 import com.tchepannou.pds.dto.CreatePartyRoleRequest;
+import com.tchepannou.pds.dto.PartyRoleRelationshipRequest;
 import com.tchepannou.pds.dto.PartyRoleStatusRequest;
 import org.apache.http.HttpStatus;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.Is.is;
 
@@ -32,6 +39,9 @@ import static org.hamcrest.core.Is.is;
 public class PartyRoleControllerIT {
     @Value("${server.port}")
     int port;
+
+    @Autowired
+    private PartyRoleRelationshipDao partyRelationshipDao;
 
     @Before
     public void setUp (){
@@ -196,7 +206,7 @@ public class PartyRoleControllerIT {
         request.setLastName("Sponsible");
 
         // @formatter:off
-        given ()
+        int id = given ()
                 .contentType(ContentType.JSON)
                 .content(request, ObjectMapperType.JACKSON_2)
         .when()
@@ -223,8 +233,13 @@ public class PartyRoleControllerIT {
             .body("party.birthDate", nullValue())
             .body("party.gender", nullValue())
             .body("party.kind", CoreMatchers.is("PERSON"))
+        .extract()
+            .path("id")
         ;
         // @formatter:on
+
+        List<PartyRoleRelationship> relationships = partyRelationshipDao.findByFromId(id);
+        assertThat(relationships).isEmpty();
     }
 
     @Test
@@ -265,6 +280,63 @@ public class PartyRoleControllerIT {
         ;
         // @formatter:on
     }
+
+    @Test
+    public void test_create_person_in_team (){
+        PartyRoleRelationshipRequest rel = new PartyRoleRelationshipRequest();
+        rel.setToId(300);
+        rel.setTypeName("is-member-of");
+
+        CreatePartyRoleRequest request = new CreatePartyRoleRequest();
+        request.setType("member");
+        request.setKind("person");
+        request.setFirstName("Ray");
+        request.setLastName("Sponsible");
+        request.setRelationship(rel);
+
+        // @formatter:off
+        int id = given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .post("/api/party-roles")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_CREATED)
+            .body("fromDate", notNullValue())
+
+            .body("type.id", is(200))
+            .body("type.name", is("member"))
+
+            .body("status.statusCode", is(2))
+            .body("status.statusText", is("active"))
+            .body("status.comment", nullValue())
+            .body("status.date", notNullValue())
+
+            .body("party.name", CoreMatchers.is("Ray Sponsible"))
+            .body("party.firstName", CoreMatchers.is("Ray"))
+            .body("party.lastName", CoreMatchers.is("Sponsible"))
+            .body("party.prefix", nullValue())
+            .body("party.suffix", nullValue())
+            .body("party.birthDate", nullValue())
+            .body("party.gender", nullValue())
+            .body("party.kind", CoreMatchers.is("PERSON"))
+        .extract()
+            .path("id")
+        ;
+        // @formatter:on
+
+        List<PartyRoleRelationship> relationships = partyRelationshipDao.findByFromId(id);
+        assertThat(relationships).hasSize(1);
+
+        PartyRoleRelationship relationship = relationships.get(0);
+        assertThat(relationship.getFromDate()).isNotNull();
+        assertThat(relationship.getFromId()).isEqualTo(id);
+        assertThat(relationship.getToId()).isEqualTo((long)rel.getToId());
+        assertThat(relationship.getTypeId()).isEqualTo(300L);
+    }
+
 
     @Test
     public void test_create_badType (){

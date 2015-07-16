@@ -36,3 +36,14 @@ insert into t_party_role_status(id, party_role_fk, status_code_fk, status_date, 
   200, 200, 1, '1973-12-27 10:30:45', 'Initial'
 );
 update t_party_role set status_fk=200 where id=200;
+
+-- createInTeam
+insert into t_party(id, name, kind) values (300, 'NYSC', 'O');
+
+insert into t_party_role(id, party_fk, type_fk, from_date) values(
+  300, 300, 100, '1973-12-27 10:30:45'
+);
+
+INSERT INTO t_party_role_relationship_type(id, from_type_fk, to_type_fk, name) VALUES(300, null, null, 'is-member-of');
+
+

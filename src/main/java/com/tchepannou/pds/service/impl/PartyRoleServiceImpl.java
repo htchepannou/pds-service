@@ -4,6 +4,7 @@ import com.tchepannou.core.exception.NotFoundException;
 import com.tchepannou.pds.dao.*;
 import com.tchepannou.pds.domain.*;
 import com.tchepannou.pds.dto.CreatePartyRoleRequest;
+import com.tchepannou.pds.dto.PartyRoleRelationshipRequest;
 import com.tchepannou.pds.dto.PartyRoleResponse;
 import com.tchepannou.pds.dto.PartyRoleStatusRequest;
 import com.tchepannou.pds.enums.PartyKind;
@@ -32,6 +33,11 @@ public class PartyRoleServiceImpl implements PartyRoleService {
     @Autowired
     private PartyRoleStatusCodeDao statusCodeDao;
 
+    @Autowired
+    private PartyRoleRelationshipTypeDao partyRelationshipTypeDao;
+
+    @Autowired
+    private PartyRoleRelationshipDao partyRelationshipDao;
 
     //-- PartyRoleService implementation
     public PartyRoleResponse findById (long id) {
@@ -67,6 +73,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
 
         PartyRoleStatusCode statusCode = statusCodeDao.findDefault(type.getId());
         PartyRoleStatus status = createPartyRoleStatus(partyRole, statusCode.getId(), null);
+        createPartyRelationship(partyRole, request.getRelationship());
 
         return new PartyRoleResponse.Builder()
                 .withParty(party)
@@ -126,6 +133,32 @@ public class PartyRoleServiceImpl implements PartyRoleService {
         partyRoleDao.create(partyRole);
 
         return partyRole;
+    }
+
+    private PartyRoleRelationship createPartyRelationship (PartyRole from, PartyRoleRelationshipRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        final PartyRelationshipType type =  partyRelationshipTypeDao.findByName(request.getTypeName());
+        if (type == null){
+            throw new BadRequestException("relationship.typeName");
+        }
+
+        final PartyRole to = partyRoleDao.findById(request.getToId());
+        if (to == null) {
+            throw new NotFoundException(request.getToId(), PartyRole.class);
+        }
+
+        PartyRoleRelationship relationship = new PartyRoleRelationship();
+        relationship.setTypeId(type.getId());
+        relationship.setFromId(from.getId());
+        relationship.setToId(to.getId());
+        relationship.setFromDate(new Date());
+
+        partyRelationshipDao.create(relationship);
+
+        return relationship;
     }
 
     private PartyRoleStatus createPartyRoleStatus(PartyRole partyRole, long statusCodeId, String comment) {

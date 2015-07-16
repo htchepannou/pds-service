@@ -16,7 +16,6 @@ public class PartyRequest {
 
     private Date birthDate;
 
-    @NotBlank(message = "gender")
     @com.tchepannou.core.validator.Enum(enumClass = Gender.class, message="gender")
     @ApiModelProperty(allowableValues = "male, female")
     private  String gender;

@@ -131,16 +131,32 @@ CREATE TABLE t_party_role_status (
 ALTER TABLE t_party_role ADD COLUMN status_fk BIGINT REFERENCES t_party_role_status(id);
 
 
-CREATE TABLE t_party_relationship_type(
+CREATE TABLE t_party_role_relationship_type(
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+
+    from_type_fk BIGINT,
+    to_type_fk BIGINT,
+
+    name VARCHAR(100) NOT NULL UNIQUE,
+
+    CONSTRAINT fk_party_relationship_type__from_type FOREIGN KEY (from_type_fk) REFERENCES t_party_role_type(id),
+    CONSTRAINT fk_party_relationship_type__to_type FOREIGN KEY (to_type_fk) REFERENCES t_party_role_type(id)
+);
+
+CREATE TABLE t_party_role_relationship(
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 
     from_fk BIGINT NOT NULL,
     to_fk BIGINT NOT NULL,
+    type_fk BIGINT NOT NULL,
+    
+    from_date DATETIME,
 
-    name VARCHAR(100) NOT NULL UNIQUE,
+    UNIQUE(from_fk, to_fk, type_fk),
 
-    CONSTRAINT fk_party_role_type__from FOREIGN KEY (from_fk) REFERENCES t_party_role_type(id),
-    CONSTRAINT fk_party_role_type__to FOREIGN KEY (to_fk) REFERENCES t_party_role_type(id)
+    CONSTRAINT fk_party_role_relationship__from FOREIGN KEY (from_fk) REFERENCES t_party_role(id),
+    CONSTRAINT fk_party_role_relationship__to FOREIGN KEY (to_fk) REFERENCES t_party_role(id),
+    CONSTRAINT fk_party_role_relationship__type FOREIGN KEY (type_fk) REFERENCES t_party_role_relationship_type(id)
 );
 
 

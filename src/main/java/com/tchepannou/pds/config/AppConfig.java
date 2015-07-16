@@ -149,4 +149,14 @@ public class AppConfig {
     public PartyRoleService partyRoleService (){
         return new PartyRoleServiceImpl();
     }
+
+    @Bean
+    public PartyRoleRelationshipTypeDao partyRelationshipTypeDao (){
+        return new PartyRoleRelationshipTypeDaoImpl(dataSource());
+    }
+
+    @Bean
+    public PartyRoleRelationshipDao partyRelationshipDao () {
+        return new PartyRoleRelationshipDaoImpl(dataSource());
+    }
 }

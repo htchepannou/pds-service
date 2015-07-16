@@ -161,7 +161,7 @@
                                         <srcFile>src/migration/sql/is5/address_postal.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/address_phone.sql</srcFile>
                                         <srcFile>src/migration/sql/is5/party_role.sql</srcFile>
-                                        <srcFile>src/migration/sql/is5/club.sql</srcFile>
+                                        <srcFile>src/migration/sql/is5/party_role_relationship.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>
