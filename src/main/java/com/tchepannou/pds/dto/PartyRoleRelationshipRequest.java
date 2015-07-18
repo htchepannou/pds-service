@@ -1,14 +1,21 @@
 package com.tchepannou.pds.dto;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Min;
+
 public class PartyRoleRelationshipRequest {
-    private Integer toId;
+    @Min(value = 1, message="toId")
+    private long toId;
+
+    @NotBlank(message = "typeName")
     private String typeName;
 
-    public Integer getToId() {
+    public long getToId() {
         return toId;
     }
 
-    public void setToId(Integer toId) {
+    public void setToId(long toId) {
         this.toId = toId;
     }
 

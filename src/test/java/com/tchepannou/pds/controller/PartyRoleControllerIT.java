@@ -190,8 +190,7 @@ public class PartyRoleControllerIT {
         .then()
             .log()
                 .all()
-            .statusCode(HttpStatus.SC_BAD_REQUEST)
-            .body("message", is("statusCode"))
+            .statusCode(HttpStatus.SC_NOT_FOUND)
         ;
         // @formatter:on
 
@@ -333,7 +332,7 @@ public class PartyRoleControllerIT {
         PartyRoleRelationship relationship = relationships.get(0);
         assertThat(relationship.getFromDate()).isNotNull();
         assertThat(relationship.getFromId()).isEqualTo(id);
-        assertThat(relationship.getToId()).isEqualTo((long)rel.getToId());
+        assertThat(relationship.getToId()).isEqualTo((long) rel.getToId());
         assertThat(relationship.getTypeId()).isEqualTo(300L);
     }
 
@@ -359,4 +358,120 @@ public class PartyRoleControllerIT {
         ;
         // @formatter:on
     }
+
+    @Test
+    public void test_link () {
+        PartyRoleRelationshipRequest request = new PartyRoleRelationshipRequest();
+        request.setToId(410);
+        request.setTypeName("is-friend-of");
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .put("/api/party-roles/400/link")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_OK)
+        ;
+        // @formatter:on
+
+        List<PartyRoleRelationship> relationships = partyRelationshipDao.findByFromId(400);
+        assertThat(relationships).hasSize(1);
+
+        PartyRoleRelationship relationship = relationships.get(0);
+        assertThat(relationship.getFromDate()).isNotNull();
+        assertThat(relationship.getFromId()).isEqualTo(400L);
+        assertThat(relationship.getToId()).isEqualTo(request.getToId());
+        assertThat(relationship.getTypeId()).isEqualTo(400L);
+
+    }
+
+    @Test
+    public void test_link_badType () {
+        PartyRoleRelationshipRequest request = new PartyRoleRelationshipRequest();
+        request.setToId(410);
+        request.setTypeName("is-friend-of????");
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .put("/api/party-roles/400/link")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_link_badTo () {
+        PartyRoleRelationshipRequest request = new PartyRoleRelationshipRequest();
+        request.setToId(9999);
+        request.setTypeName("is-friend-of????");
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .put("/api/party-roles/400/link")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+        ;
+        // @formatter:on
+    }
+
+
+    @Test
+    public void test_link_badFrom () {
+        PartyRoleRelationshipRequest request = new PartyRoleRelationshipRequest();
+        request.setToId(400);
+        request.setTypeName("is-friend-of");
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .put("/api/party-roles/999/link")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+        ;
+        // @formatter:on
+    }
+
+    @Test
+    public void test_unlink () {
+        PartyRoleRelationshipRequest request = new PartyRoleRelationshipRequest();
+        request.setToId(510);
+        request.setTypeName("is-parent-of");
+
+        // @formatter:off
+        given ()
+                .contentType(ContentType.JSON)
+                .content(request, ObjectMapperType.JACKSON_2)
+        .when()
+            .delete("/api/party-roles/500/unlink")
+        .then()
+            .log()
+                .all()
+            .statusCode(HttpStatus.SC_OK)
+        ;
+        // @formatter:on
+
+        List<PartyRoleRelationship> relationships = partyRelationshipDao.findByFromId(500);
+        assertThat(relationships).isEmpty();
+    }
+
+
 }

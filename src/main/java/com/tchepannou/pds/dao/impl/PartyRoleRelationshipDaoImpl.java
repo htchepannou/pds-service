@@ -20,7 +20,7 @@ public class PartyRoleRelationshipDaoImpl extends JdbcTemplate implements PartyR
     }
 
     @Override 
-    public PartyRoleRelationship findById(long id) {
+    public PartyRoleRelationship findById(final long id) {
         try {
             return queryForObject(
                     "SELECT * FROM t_party_role_relationship WHERE id=?",
@@ -33,7 +33,20 @@ public class PartyRoleRelationshipDaoImpl extends JdbcTemplate implements PartyR
     }
 
     @Override
-    public List<PartyRoleRelationship> findByFromId(long fromId) {
+    public PartyRoleRelationship findByFromByToByType (final long fromId, final long toId, final long typeId) {
+        try {
+            return queryForObject(
+                    "SELECT * FROM t_party_role_relationship WHERE from_fk=? AND to_fk=? AND type_fk=?",
+                    new Object[]{fromId, toId, typeId},
+                    getRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {    // NOSONAR
+            return null;
+        }
+    }
+
+    @Override
+    public List<PartyRoleRelationship> findByFromId(final long fromId) {
         return query(
                 "SELECT * FROM t_party_role_relationship WHERE from_fk=?",
                 new Object[]{fromId},
@@ -42,7 +55,7 @@ public class PartyRoleRelationshipDaoImpl extends JdbcTemplate implements PartyR
     }
 
     @Override
-    public long create(PartyRoleRelationship relationship) {
+    public long create(final PartyRoleRelationship relationship) {
         final KeyHolder holder = new GeneratedKeyHolder();
         update(new PreparedStatementCreator() {
             @Override
@@ -65,8 +78,8 @@ public class PartyRoleRelationshipDaoImpl extends JdbcTemplate implements PartyR
     }
 
     @Override 
-    public void delete(PartyRoleRelationship relationship) {
-        update("DELETE FROM t_party_relationship WHERE id=?", relationship.getId());
+    public void delete(final long id) {
+        update("DELETE FROM t_party_role_relationship WHERE id=?", id);
     }
 
     protected RowMapper<PartyRoleRelationship> getRowMapper() {

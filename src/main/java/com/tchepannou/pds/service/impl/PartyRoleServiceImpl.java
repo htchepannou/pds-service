@@ -11,10 +11,12 @@ import com.tchepannou.pds.enums.PartyKind;
 import com.tchepannou.pds.exception.BadRequestException;
 import com.tchepannou.pds.service.PartyRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class PartyRoleServiceImpl implements PartyRoleService {
     //-- Attributes
@@ -40,7 +42,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
     private PartyRoleRelationshipDao partyRelationshipDao;
 
     //-- PartyRoleService implementation
-    public PartyRoleResponse findById (long id) {
+    public PartyRoleResponse findById (final long id) {
         PartyRole partyRole = partyRoleDao.findById(id);
         if (partyRole == null) {
             throw new NotFoundException(id, PartyRole.class);
@@ -62,7 +64,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
 
     @Override
     @Transactional
-    public PartyRoleResponse create(CreatePartyRoleRequest request) {
+    public PartyRoleResponse create(final CreatePartyRoleRequest request) {
         PartyRoleType type = typeDao.findByName(request.getType());
         if (type == null){
             throw new BadRequestException("type");
@@ -87,33 +89,85 @@ public class PartyRoleServiceImpl implements PartyRoleService {
 
     @Override
     @Transactional
-    public PartyRoleResponse setStatus(long id, PartyRoleStatusRequest request) {
+    public PartyRoleResponse setStatus(final long id, final PartyRoleStatusRequest request) {
         PartyRole partyRole = partyRoleDao.findById(id);
         if (partyRole == null) {
             throw new NotFoundException(id, PartyRole.class);
         }
 
-        try {
-            PartyRoleStatus status = createPartyRoleStatus(partyRole, request.getStatusCode(), request.getComment());
+        PartyRoleStatusCode statusCode = statusCodeDao.findById(request.getStatusCode());
+        if (statusCode == null){
+            throw new NotFoundException(request.getStatusCode(), PartyRoleStatus.class);
+        }
 
-            partyRole.setStatusId(status.getId());
-            partyRoleDao.update(partyRole);
+        /* create */
+        PartyRoleStatus status = createPartyRoleStatus(partyRole, request.getStatusCode(), request.getComment());
 
-            return new PartyRoleResponse.Builder()
-                    .withParty(partyDao.findById(partyRole.getPartyId()))
-                    .withPartyRole(partyRole)
-                    .withStatus(status)
-                    .withStatusCode(statusCodeDao.findById(status.getStatusCodeId()))
-                    .withType(typeDao.findById(partyRole.getTypeId()))
-                    .build()
-                    ;
-        } catch (DataIntegrityViolationException e) {
-            throw new BadRequestException("statusCode");
+        partyRole.setStatusId(status.getId());
+        partyRoleDao.update(partyRole);
+
+        return new PartyRoleResponse.Builder()
+                .withParty(partyDao.findById(partyRole.getPartyId()))
+                .withPartyRole(partyRole)
+                .withStatus(status)
+                .withStatusCode(statusCodeDao.findById(status.getStatusCodeId()))
+                .withType(typeDao.findById(partyRole.getTypeId()))
+                .build()
+        ;
+    }
+
+    @Override
+    @Transactional
+    public boolean link(final long fromId, final PartyRoleRelationshipRequest request) {
+        PartyRelationshipType type = partyRelationshipTypeDao.findByName(request.getTypeName());
+        if (type == null){
+            throw new NotFoundException(request.getTypeName(), PartyRelationshipType.class);
+        }
+
+        PartyRole from = partyRoleDao.findById(fromId);
+        if (from == null){
+            throw new NotFoundException(fromId, PartyRole.class);
+        }
+
+        PartyRole to = partyRoleDao.findById(request.getToId());
+        if (to == null){
+            throw new NotFoundException(request.getToId(), PartyRole.class);
+        }
+
+        PartyRoleRelationship relationship = partyRelationshipDao.findByFromByToByType(fromId, to.getId(), type.getId());
+        if (relationship == null){
+            relationship = new PartyRoleRelationship();
+            relationship.setToId(to.getId());
+            relationship.setFromId(fromId);
+            relationship.setFromDate(new Date());
+            relationship.setTypeId(type.getId());
+            partyRelationshipDao.create(relationship);
+            return true;
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean unlink(final long fromId, final PartyRoleRelationshipRequest request) {
+        PartyRelationshipType type = partyRelationshipTypeDao.findByName(request.getTypeName());
+        if (type == null){
+            return false;
+        }
+
+        PartyRoleRelationship relationship = partyRelationshipDao.findByFromByToByType(fromId, request.getToId(), type.getId());
+        if (relationship != null){
+            partyRelationshipDao.delete(relationship.getId());
+            return true;
+        } else {
+            List keys = new ArrayList();
+            keys.add(Arrays.asList(fromId, request.getToId(), request.getTypeName()));
+            throw new NotFoundException((ArrayList)keys, PartyRoleRelationship.class);
         }
     }
 
     //-- Private
-    private Party createParty(CreatePartyRoleRequest request){
+    private Party createParty(final CreatePartyRoleRequest request){
         Party party = new Party();
         party.setKind(PartyKind.fromText(request.getKind()));
         party.setFirstName(request.getFirstName());
@@ -125,7 +179,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
         return party;
     }
 
-    private PartyRole createPartyRole(Party party, PartyRoleType type) {
+    private PartyRole createPartyRole(final Party party, final PartyRoleType type) {
         PartyRole partyRole = new PartyRole();
         partyRole.setPartyId(party.getId());
         partyRole.setTypeId(type.getId());
@@ -135,7 +189,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
         return partyRole;
     }
 
-    private PartyRoleRelationship createPartyRelationship (PartyRole from, PartyRoleRelationshipRequest request) {
+    private PartyRoleRelationship createPartyRelationship (final PartyRole from, final PartyRoleRelationshipRequest request) {
         if (request == null) {
             return null;
         }
@@ -161,7 +215,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
         return relationship;
     }
 
-    private PartyRoleStatus createPartyRoleStatus(PartyRole partyRole, long statusCodeId, String comment) {
+    private PartyRoleStatus createPartyRoleStatus(final PartyRole partyRole, final long statusCodeId, final String comment) {
         PartyRoleStatus status = new PartyRoleStatus();
         status.setComment(comment);
         status.setStatusCodeId(statusCodeId);

@@ -86,4 +86,30 @@ public class PartyRoleController extends AbstractController {
     ){
         return partyRoleService.setStatus(partyRoleId, request);
     }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{partyRoleId}/link")
+    @ApiOperation("Link")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Bad type, fromId or toId", response = ErrorResponse.class)
+    })
+    public void link(
+            @PathVariable final long partyRoleId,
+            @Valid @RequestBody final PartyRoleRelationshipRequest request
+    ){
+        partyRoleService.link(partyRoleId, request);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{partyRoleId}/unlink")
+    @ApiOperation("Unlink")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Bad type, fromId or toId", response = ErrorResponse.class)
+    })
+    public void unlink(
+            @PathVariable final long partyRoleId,
+            @Valid @RequestBody final PartyRoleRelationshipRequest request
+    ){
+        partyRoleService.unlink(partyRoleId, request);
+    }
 }

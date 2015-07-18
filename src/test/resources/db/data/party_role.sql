@@ -46,4 +46,29 @@ insert into t_party_role(id, party_fk, type_fk, from_date) values(
 
 INSERT INTO t_party_role_relationship_type(id, from_type_fk, to_type_fk, name) VALUES(300, null, null, 'is-member-of');
 
+-- test_link
+insert into t_party(id, name, kind) values (400, 'NYSC', 'O');
+insert into t_party(id, name, kind) values (410, 'NYSC', 'O');
 
+insert into t_party_role(id, party_fk, type_fk, from_date) values(
+  400, 400, 100, '1973-12-27 10:30:45'
+);
+insert into t_party_role(id, party_fk, type_fk, from_date) values(
+  410, 410, 100, '1973-12-27 10:30:45'
+);
+
+INSERT INTO t_party_role_relationship_type(id, from_type_fk, to_type_fk, name) VALUES(400, null, null, 'is-friend-of');
+
+-- test_unlink
+insert into t_party(id, name, kind) values (500, 'NYSC', 'O');
+insert into t_party(id, name, kind) values (510, 'NYSC', 'O');
+
+insert into t_party_role(id, party_fk, type_fk, from_date) values(
+  500, 500, 100, '1973-12-27 10:30:45'
+);
+insert into t_party_role(id, party_fk, type_fk, from_date) values(
+  510, 510, 100, '1973-12-27 10:30:45'
+);
+
+INSERT INTO t_party_role_relationship_type(id, from_type_fk, to_type_fk, name) VALUES(500, null, null, 'is-parent-of');
+INSERT INTO t_party_role_relationship(id, from_fk, to_fk, type_fk, from_date) VALUES(500, 500, 510, 500, now());
