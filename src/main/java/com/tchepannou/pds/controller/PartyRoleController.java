@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @RequestMapping(value="/api/party-roles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PartyRoleController extends AbstractController {
     //-- Attributes
-    private Logger LOG = LoggerFactory.getLogger(PartyRoleController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PartyRoleController.class);
 
     @Autowired
     private PartyRoleTypeService partyRoleTypeService;

@@ -29,7 +29,7 @@ public class PartyRoleRelationshipTypeDaoImpl extends AbstractPersistentEnumDaoI
         return new RowMapper() {
             @Override
             public PartyRelationshipType mapRow(ResultSet rs, int i) throws SQLException {
-                PartyRelationshipType obj = (PartyRelationshipType)createPersistenEnum();
+                PartyRelationshipType obj = createPersistenEnum();
                 obj.setId(rs.getLong("id"));
                 obj.setName(rs.getString("name"));
                 obj.setFromTypeId(rs.getLong("from_type_fk"));

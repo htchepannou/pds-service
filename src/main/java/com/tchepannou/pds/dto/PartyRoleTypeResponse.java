@@ -36,4 +36,5 @@ public class PartyRoleTypeResponse {
             this.role = role;
             return this;
         }
-    }}
+    }
+}
