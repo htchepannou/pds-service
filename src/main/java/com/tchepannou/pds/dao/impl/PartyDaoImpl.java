@@ -81,12 +81,12 @@ public class PartyDaoImpl extends JdbcTemplate implements PartyDao {
         return new RowMapper<Party>() {
             @Override
             public Party mapRow(final ResultSet rs, final int i) throws SQLException {
-                return dao.mapRow(rs, i);
+                return dao.mapRow(rs);
             }
         };
     }
 
-    public Party mapRow(final ResultSet rs, final int i) throws SQLException {
+    public Party mapRow(final ResultSet rs) throws SQLException {
         final Party obj = new Party ();
         obj.setId(rs.getLong("id"));
 
