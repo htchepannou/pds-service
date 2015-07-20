@@ -90,7 +90,7 @@ public class PartyRoleControllerIT {
                 .all()
             .statusCode(HttpStatus.SC_OK)
             .body("id", is(100))
-            .body("fromDate", is("1973-12-27 10:30:45 -0500"))
+            .body("fromDate", startsWith("1973-12-27 10:30:45"))
 
             .body("type.id", is(200))
             .body("type.name", is("member"))
@@ -99,7 +99,7 @@ public class PartyRoleControllerIT {
             .body("status.statusCode", is(2))
             .body("status.statusText", is("active"))
             .body("status.comment", is("Initial"))
-            .body("status.date", is("1973-12-27 10:30:45 -0500"))
+            .body("status.date", startsWith("1973-12-27 10:30:45"))
 
             .body("id", is(100))
             .body("party.name", CoreMatchers.is("Ray Sponsible"))
@@ -131,7 +131,7 @@ public class PartyRoleControllerIT {
             .log()
                 .all()
             .body("id", is(200))
-            .body("fromDate", is("1973-12-27 10:30:45 -0500"))
+            .body("fromDate", startsWith("1973-12-27 10:30:45"))
 
             .body("type.id", is(200))
             .body("type.name", is("member"))
