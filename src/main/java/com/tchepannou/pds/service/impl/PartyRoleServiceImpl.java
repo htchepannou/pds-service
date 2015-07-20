@@ -42,6 +42,7 @@ public class PartyRoleServiceImpl implements PartyRoleService {
     private PartyRoleRelationshipDao partyRelationshipDao;
 
     //-- PartyRoleService implementation
+    @Override
     public PartyRoleResponse findById (final long id) {
         PartyRole partyRole = partyRoleDao.findById(id);
         if (partyRole == null) {

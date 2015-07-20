@@ -43,4 +43,5 @@ public class PartyRoleStatusCodeResponse {
             this.statusCode = statusCode;
             return this;
         }
-    }}
+    }
+}

@@ -37,30 +37,13 @@ public class PartyDaoImpl extends JdbcTemplate implements PartyDao {
     }
 
     @Override
-    public long create(Party party) {
+    public long create(final Party party) {
         final KeyHolder holder = new GeneratedKeyHolder();
+        final PartyDaoImpl dao = this;
         update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                final String sql = "INSERT INTO t_party(name, first_name, last_name, prefix, suffix, birth_date, from_date, height, weight, gender, kind) "
-                        + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-                final PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
-                final Gender gender = party.getGender();
-                final PartyKind kind = party.getKind();
-
-                ps.setString(1, party.getName());
-                ps.setString(2, party.getFirstName());
-                ps.setString(3, party.getLastName());
-                ps.setString(4, party.getPrefix());
-                ps.setString(5, party.getSuffix());
-                ps.setDate(6, DateUtils.asSqlDate(party.getBirthDate()));
-                ps.setTimestamp(7, DateUtils.asTimestamp(party.getFromDate()));
-                ps.setInt(8, party.getHeigth());
-                ps.setInt(9, party.getWeight());
-                ps.setString(10, gender != null ? String.valueOf(gender.getCode()) : null);
-                ps.setString(11, kind != null ? String.valueOf(kind.getCode()) : null);
-
-                return ps;
+                return dao.createPreparedStatement(party, connection);
             }
         }, holder);
 
@@ -77,7 +60,7 @@ public class PartyDaoImpl extends JdbcTemplate implements PartyDao {
                 " SET name=?, first_name=?, last_name=?, prefix=?, suffix=?, birth_date=?, height=?, weight=?, gender=?, kind=?" +
                 " WHERE id=?";
 
-        update (sql,
+        update(sql,
                 party.getName(),
                 party.getFirstName(),
                 party.getLastName(),
@@ -93,26 +76,55 @@ public class PartyDaoImpl extends JdbcTemplate implements PartyDao {
     }
 
     private RowMapper<Party> getRowMapper (){
+        final PartyDaoImpl dao = this;
+
         return new RowMapper<Party>() {
             @Override
             public Party mapRow(final ResultSet rs, final int i) throws SQLException {
-                final Party obj = new Party ();
-                obj.setId(rs.getLong("id"));
-
-                obj.setFromDate(rs.getTimestamp("from_date"));
-
-                obj.setName(rs.getString("name"));
-                obj.setFirstName(rs.getString("first_name"));
-                obj.setLastName(rs.getString("last_name"));
-                obj.setPrefix(rs.getString("prefix"));
-                obj.setSuffix(rs.getString("suffix"));
-                obj.setBirthDate(rs.getDate("birth_date"));
-                obj.setHeigth(rs.getInt("height"));
-                obj.setWeight(rs.getInt("weight"));
-                obj.setGender(Gender.fromText(rs.getString("gender")));
-                obj.setKind(PartyKind.fromText(rs.getString("kind")));
-                return obj;
+                return dao.mapRow(rs, i);
             }
         };
     }
+
+    public Party mapRow(final ResultSet rs, final int i) throws SQLException {
+        final Party obj = new Party ();
+        obj.setId(rs.getLong("id"));
+
+        obj.setFromDate(rs.getTimestamp("from_date"));
+
+        obj.setName(rs.getString("name"));
+        obj.setFirstName(rs.getString("first_name"));
+        obj.setLastName(rs.getString("last_name"));
+        obj.setPrefix(rs.getString("prefix"));
+        obj.setSuffix(rs.getString("suffix"));
+        obj.setBirthDate(rs.getDate("birth_date"));
+        obj.setHeigth(rs.getInt("height"));
+        obj.setWeight(rs.getInt("weight"));
+        obj.setGender(Gender.fromText(rs.getString("gender")));
+        obj.setKind(PartyKind.fromText(rs.getString("kind")));
+        return obj;
+    }
+
+    private PreparedStatement createPreparedStatement(final Party party, final Connection connection) throws SQLException {
+        final String sql = "INSERT INTO t_party(name, first_name, last_name, prefix, suffix, birth_date, from_date, height, weight, gender, kind) "
+                + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        final PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
+        final Gender gender = party.getGender();
+        final PartyKind kind = party.getKind();
+
+        ps.setString(1, party.getName());
+        ps.setString(2, party.getFirstName());
+        ps.setString(3, party.getLastName());
+        ps.setString(4, party.getPrefix());
+        ps.setString(5, party.getSuffix());
+        ps.setDate(6, DateUtils.asSqlDate(party.getBirthDate()));
+        ps.setTimestamp(7, DateUtils.asTimestamp(party.getFromDate()));
+        ps.setInt(8, party.getHeigth());
+        ps.setInt(9, party.getWeight());
+        ps.setString(10, gender != null ? String.valueOf(gender.getCode()) : null);
+        ps.setString(11, kind != null ? String.valueOf(kind.getCode()) : null);
+
+        return ps;
+    }
+
 }

@@ -18,11 +18,11 @@ public class PartyRoleStatusResponse implements Serializable {
     //-- Constructor
     public PartyRoleStatusResponse(final Builder builder){
         final PartyRoleStatus status = builder.status;
-        final PartyRoleStatusCode statusCode = builder.statusCode;
+        final PartyRoleStatusCode code = builder.statusCode;
 
         this.id = status.getId();
-        this.statusCode = statusCode.getId();
-        this.statusText = statusCode.getName();
+        this.statusCode = code.getId();
+        this.statusText = code.getName();
         this.date = status.getDate();
         this.comment = status.getComment();
     }

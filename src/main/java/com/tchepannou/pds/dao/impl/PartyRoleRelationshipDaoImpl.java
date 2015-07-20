@@ -84,6 +84,7 @@ public class PartyRoleRelationshipDaoImpl extends JdbcTemplate implements PartyR
 
     protected RowMapper<PartyRoleRelationship> getRowMapper() {
         return new RowMapper() {
+            @Override
             public PartyRoleRelationship mapRow(ResultSet rs, int i) throws SQLException {
                 PartyRoleRelationship obj = new PartyRoleRelationship();
                 obj.setId(rs.getLong("id"));

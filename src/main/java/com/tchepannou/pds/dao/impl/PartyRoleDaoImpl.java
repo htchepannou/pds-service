@@ -43,13 +43,11 @@ public class PartyRoleDaoImpl extends JdbcTemplate implements PartyRoleDao {
 
                 ps.setLong(1, party.getPartyId());
                 ps.setLong(2, party.getTypeId());
-
                 if (party.getStatusId() == 0){
                     ps.setNull(3, Types.BIGINT);
                 } else {
                     ps.setLong(3, party.getStatusId());
                 }
-
                 ps.setTimestamp(4, DateUtils.asTimestamp(party.getFromDate()));
 
                 return ps;
